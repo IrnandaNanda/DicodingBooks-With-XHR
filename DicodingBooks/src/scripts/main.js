@@ -3,30 +3,22 @@ function main() {
 
   const getBook = () => {
     // tuliskan kode di sini!
+    fetch(`${baseUrl}/list`)
+      .then((response) => {
+        return response.json()
+      })
 
-    // Membuat instance dari XMLHttpRequest
-    const xhr = new XMLHttpRequest();
+      .then((responseJson) => {
 
-    // Menetapkan callback jika function berhasil atau error
-    xhr.onload = function () {
-      const responseJson = JSON.parse(xhr.responseText);
-
-      if (responseJson.error) {
-        showResponseMessage(responseJson.message);
-      } else {
-        renderAllBooks(responseJson.books);
-      }
-    };
-
-    xhr.onerror = function () {
-      showResponseMessage(xhr.statusText);
-    };
-
-    // Mengatur request ke server
-    xhr.open("GET", `${baseUrl}/list`);
-
-    // Mengirim request ke server
-    xhr.send();
+        if(responseJson.error) {
+          showResponseMessage(responseJson.message);
+        } else {
+          renderAllBooks(responseJson.books);
+        }
+      })
+      .catch((error) => {
+        showResponseMessage(error);
+      })
   };
 
   const insertBook = (book) => {
